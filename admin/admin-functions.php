@@ -9,7 +9,7 @@ class TontidAdmin {
     }
 
 /*************************************************************************************
-                             Meny för pluginet i dashboard
+                          Meny & UI för pluginet i dashboard
 ************************************************************************************/
 
 public function registerAdminMenus() {
@@ -27,8 +27,8 @@ public function registerAdminMenus() {
 
     add_submenu_page(
         'tontid', // slug till parent
-        'Alla salar', // title (för browser tab)
-        'Alla salar', // namn i menyn 
+        'Alla rum', // title (för browser tab)
+        'Alla rum', // namn i menyn 
         'manage_options', // En såkallad "capability" av kraftig sort som tex administratör besitter
         'tontid-see-all-rooms', // slug
         array($this, 'displayAllRooms'), // Callback funktion för att generera UI
@@ -36,21 +36,12 @@ public function registerAdminMenus() {
     );
 
     add_submenu_page(
-        'tontid',                     // Parent slug
-        'Lägg till sal',             // Sidtitel
-        'Lägg till sal',             // Menynamn
-        'manage_options',             // Capability
-        'tontid-add-room',             // Slug
-        array( $this, 'displayAddRoomPage' ) // Callback
-    );
-
-    add_submenu_page(
-        'tontid',                     // Parent slug
-        'Ta bort sal',             // Sidtitel
-        'Ta bort sal',             // Menynamn
-        'manage_options',             // Capability
-        'tontid-delete-room',          // Slug för sidan för att ta bort rum
-        array( $this, 'displayDeleteRoomPage' ) // Callback för att visa sidan
+        'tontid',
+        'Hantera rum',
+        'Hantera rum',
+        'manage_options',
+        'manage-rooms',
+        array($this, 'displayManageRooms'),
     );
 
     add_submenu_page(
@@ -71,7 +62,7 @@ public function registerAdminMenus() {
     public function displayAddRoomPage() {
         ?>
         <div class="wrap">
-            <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+            <h1>Lägg till ett rum</h1>
 
             <?php
             if ( isset( $_GET['error'] ) && $_GET['error'] === 'duplicate_id' ) {
@@ -139,7 +130,7 @@ public function displayDeleteRoomPage() {
 
     ?>
     <div class="wrap">
-        <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+        <h1>Ta bort ett rum</h1>
 
         <?php if ( isset( $_GET['message'] ) && $_GET['message'] === 'room_deleted' ) : ?>
             <div class="notice notice-success is-dismissible">
@@ -188,6 +179,33 @@ public function displayDeleteRoomPage() {
         </form>
     </div>
     <?php
+}
+
+/* admin UI för att hantera rum (lägga till rum + ta bort rum)
+------------------------------------------------------------------------------------*/
+public function displayManageRooms(){
+    $this->displayAddRoomPage();
+    $this->displayDeleteRoomPage();
+} 
+
+
+/* admin UI för att se alla rum 
+------------------------------------------------------------------------------------*/
+public function displayAllRooms(){
+    global $wpdb;
+    $rooms = $wpdb->get_results('SELECT * FROM '  . $wpdb->prefix . 'music_rooms');
+    
+    echo var_dump($rooms);
+
+    echo '<pre>';
+    var_dump($rooms);
+    echo '</pre>';
+
+    echo print_r($rooms);
+
+    echo '<pre>';
+    print_r($rooms);
+    echo '</pre>';
 }
 
 
