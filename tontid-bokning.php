@@ -15,8 +15,11 @@ require_once plugin_dir_path( __FILE__ ) . 'admin/admin-functions.php';
 
 // Inkludera databas-hanteringsfilen
 require_once plugin_dir_path( __FILE__ ) . 'db/db-functions.php';
+
 //Lägg till tabell för rum och bokningar vid aktivering av pluginet (om dessa inte redan finns sedan innan)
-register_activation_hook(__FILE__, 'tontid_create_music_rooms_table'); //metoden ligger i db-functions.php 
+//dessa registreringsmetoder ligger i db-functions.php 
+register_activation_hook(__FILE__, 'tontid_create_music_rooms_table'); 
+register_activation_hook(__FILE__, 'tontid_create_bookings_table');
 
 // Skapa en instans av admin-klassen för att initiera admin-menyn och hooks
 if ( is_admin() ) {

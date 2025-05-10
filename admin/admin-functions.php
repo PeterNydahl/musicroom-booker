@@ -40,7 +40,7 @@ public function registerAdminMenus() {
         'Hantera rum',
         'Hantera rum',
         'manage_options',
-        'manage-rooms',
+        'tontid-manage-rooms',
         array($this, 'displayManageRooms'),
     );
 
@@ -81,7 +81,7 @@ public function registerAdminMenus() {
                 <?php wp_nonce_field( 'tontid_add_room_nonce', 'tontid_add_room_nonce' ); ?>
 
                 <table class="form-table">
-                    <tr class="row-room-id">
+                    <tr>
                         <th scope="row">
                             <label for="room_id">Rums-ID</label>
                         </th>
@@ -90,12 +90,12 @@ public function registerAdminMenus() {
                             <p class="description">Ange ett unikt ID för musiksalen.</p>
                         </td>
                     </tr>
-                    <tr class="row-equipment">
+                    <tr>
                         <th scope="row">
                             <label for="equipment">Utrustning</label>
                         </th>
                         <td>
-                            <input type="checkbox" id="pa_system" name="equipment[]" value="pa_system">
+                            <input type="checkbox" id="pa_system" name="equipment[]" value="pa system">
                             <label for="pa_system">PA System</label><br>
                             <input type="checkbox" id="monitors" name="equipment[]" value="monitors">
                             <label for="monitors">Monitorer</label><br>
@@ -106,7 +106,18 @@ public function registerAdminMenus() {
                             <p class="description">Välj den tillgängliga utrustningen i detta rum.</p>
                         </td>
                     </tr>
+                    <tr>
+                        <th scope="row">
+                            <label for="room_description">Beskrivning</label>
+                        </th>
+                        <td>
+                            <input type="text" id="room_description" name="room_description" value="" class="regular-text" required>
+                            <p class="description">Här kan du ange extra information om rummet!</p>
+                        </td>
+                    </tr>
+                
                 </table>
+                
 
                 <?php submit_button( 'Lägg till rum' ); ?>
             </form>
@@ -125,13 +136,11 @@ public function registerAdminMenus() {
 ------------------------------------------------------------------------------------*/
 public function displayDeleteRoomPage() {
     global $wpdb;
-    $table_name = $wpdb->prefix . 'music_rooms';
-    $rooms = $wpdb->get_results( "SELECT room_id, name FROM $table_name" ); // Hämta ID och namn på rum
-
+    $table_name = $wpdb->prefix . 'tontid_music_rooms';
+    $rooms = $wpdb->get_results( "SELECT room_id FROM $table_name" ); // Hämta ID och namn på rum
     ?>
     <div class="wrap">
         <h1>Ta bort ett rum</h1>
-
         <?php if ( isset( $_GET['message'] ) && $_GET['message'] === 'room_deleted' ) : ?>
             <div class="notice notice-success is-dismissible">
                 <p><strong>Rummet har tagits bort!</strong></p>
@@ -161,7 +170,7 @@ public function displayDeleteRoomPage() {
                             <?php if ( ! empty( $rooms ) ) : ?>
                                 <?php foreach ( $rooms as $room ) : ?>
                                     <option value="<?php echo esc_attr( $room->room_id ); ?>">
-                                        <?php echo esc_html( $room->name ? $room->name . ' (' . $room->room_id . ')' : $room->room_id ); ?>
+                                        <?php echo esc_html( $room->room_id ) ?>
                                     </option>
                                 <?php endforeach; ?>
                             <?php else : ?>
@@ -191,21 +200,45 @@ public function displayManageRooms(){
 
 /* admin UI för att se alla rum 
 ------------------------------------------------------------------------------------*/
-public function displayAllRooms(){
+public function displayAllRooms() {
     global $wpdb;
-    $rooms = $wpdb->get_results('SELECT * FROM '  . $wpdb->prefix . 'music_rooms');
-    
-    echo var_dump($rooms);
+    $table_name = $wpdb->prefix . 'tontid_music_rooms';
+    $rooms = $wpdb->get_results("SELECT * FROM $table_name");
 
-    echo '<pre>';
-    var_dump($rooms);
-    echo '</pre>';
+    echo '<div class="wrap">';
+    echo '<h1>' . esc_html(get_admin_page_title()) . '</h1>';
+    echo '<table class="wp-list-table widefat fixed striped">';
+    echo '<thead>';
+    echo '<tr>';
+    echo '<th>Rums-ID</th>';
+    echo '<th>Utrustning</th>';
+    echo '<th>Beskrivning</th>';
+    echo '</tr>';
+    echo '</thead>';
+    echo '<tbody>';
 
-    echo print_r($rooms);
+    if (!empty($rooms)) {
+        foreach ($rooms as $room) {
+            echo '<tr>';
+            echo '<td>' . esc_html($room->room_id) . '</td>';
+            echo '<td>' . esc_html($room->room_equipment) . '</td>';
+            echo '<td>' . esc_html($room->room_description) . '</td>';
+            echo '</tr>';
+        }
+    } else {
+        echo '<tr><td colspan="2">Inga rum har lagts till ännu.</td></tr>';
+    }
 
-    echo '<pre>';
-    print_r($rooms);
-    echo '</pre>';
+    // echo '</tbody>';
+    // echo '<tfoot>';
+    // echo '<tr>';
+    // echo '<th>Rums-ID</th>';
+    // echo '<th>Utrustning</th>';
+    // echo '<th>Beskrivning</th>';
+    // echo '</tr>';
+    // echo '</tfoot>';
+    // echo '</table>';
+    // echo '</div>';
 }
 
 
