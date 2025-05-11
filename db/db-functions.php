@@ -27,6 +27,9 @@ function tontid_create_music_rooms_table() {
     dbDelta($sql); // Skapar tabellen om den inte finns
 }
 
+/* Skapa tabell för bokningar (anropas när pluginet aktiveras via tontid-bokning.php)
+-------------------------------------------------------------------------------------*/
+
 function tontid_create_bookings_table() {
     global $wpdb;
     $table_name = $wpdb->prefix . "tontid_bookings";
@@ -46,14 +49,72 @@ function tontid_create_bookings_table() {
 }
 
 
-/* Skapa tabell för bokningar (anropas när pluginet aktiveras via tontid-bokning.php)
--------------------------------------------------------------------------------------*/
-
-
 
 
 /*************************************************************************************
-          Lägga till nytt rum baserat på input från admin dashboard
+              Lägga till ny bokning baserad på input från admin dashboard
+ ************************************************************************************/
+function tontid_handle_add_booking() {
+    // Avbryter om formuläret saknar värden eller om nonce är ogiltig (säkerhetsåtgärd i WordPress)
+    if ( ! isset( $_POST['tontid_add_booking_nonce'] ) || ! wp_verify_nonce( $_POST['tontid_add_booking_nonce'], 'tontid_add_booking_nonce' ) ) {
+        wp_die('Ogiltig eller utgången säkerhetsnyckel! Försök igen.');
+    }
+
+    // Om formuläret har värden
+    if (
+        isset( $_POST['room_id'] ) && ! empty( $_POST['room_id'] ) &&
+        isset( $_POST['booking_start'] ) && ! empty( $_POST['booking_start'] ) &&
+        isset( $_POST['booking_end'] ) && ! empty( $_POST['booking_end'] )
+    ) {
+        // Sanera användardata
+        $room_id = sanitize_text_field( $_POST['room_id'] );
+        $booking_start = sanitize_text_field( $_POST['booking_start'] );
+        $booking_end = sanitize_text_field( $_POST['booking_end'] );
+
+        // Ogiltigt datum/tid, hantera fel
+        if ( strtotime( $booking_start ) === false || strtotime( $booking_end ) === false ) {
+            wp_die( 'Ogiltigt värde för datum/tid' );
+        }
+
+        // Sätt upp global WP-databasanslutning
+        global $wpdb;
+
+        // hämta aktuell anvädares id nummer i databasen
+        $user_id = get_current_user_id();
+
+        // Förbered SQL-frågan och anropa databasen
+        $result = $wpdb->insert(
+            $wpdb->prefix . 'tontid_bookings',
+            array(
+                'room_id' => $room_id,
+                'user_id' => $user_id,
+                'booking_start' => $booking_start,
+                'booking_end' => $booking_end
+            ),
+            array(
+                '%s',  // room_id
+                '%d',  // user_id
+                '%s',  // booking_start
+                '%s'   // booking_end
+            )
+        );
+
+        // Kontrollera om insättningen lyckades
+        if ( false === $result ) {
+            wp_die( 'Kunde inte lägga till bokningen i databasen' );
+        }
+        // Återkoppla till en annan sida eller visa ett meddelande
+    //     wp_redirect( admin_url( 'admin.php?page=tontid-handle-bookings' ) );  // Exempel på omdirigering
+    //     exit;
+    // } else {
+        // Om några värden saknas
+    //     wp_die( 'Alla fält måste fyllas i.' );
+    // }
+}
+
+
+/*************************************************************************************
+               Lägga till nytt rum baserat på input från admin dashboard
  ************************************************************************************/
 
 function tontid_handle_add_room_form() {
@@ -173,4 +234,6 @@ function tontid_handle_delete_room() {
         wp_safe_redirect( $redirect_url );
         exit; // Avsluta skriptet
     }
+}
+
 }
