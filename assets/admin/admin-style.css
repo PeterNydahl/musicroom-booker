@@ -1,3 +1,38 @@
-.test-style{
-    color: red;
+:root {
+    --webbRed: hsl(353.93deg 91.75% 61.96%);
+}
+
+.schedule{
+    display: grid;
+    grid-template-columns: 50px repeat(5, 200px);
+    border: 1px solid red;
+}
+
+.schedule__header {
+    grid-row: 1;
+    font-weight: bold;
+    text-align: center;
+    padding: 8px;
+}
+
+.schedule__time-slots{
+  display: grid;
+  grid-template-rows: repeat(25, 30px);  
+}
+
+.schedule-timeslot{
+    box-sizing: border-box;
+    border-top: 1px solid rgb(11, 160, 140);
+    height: 30px;
+}
+
+.schedule__weekday {
+    display: grid;
+    grid-template-rows: repeat(720, 1px);
+    background-color: aliceblue;
+}
+
+.booking {
+    background-color: var(--webbRed);
+    border-radius: 5px;
 }
