@@ -29,32 +29,58 @@ function tontid_enqueue_flatpickr( $hook ) {
 
     // Initiera Flatpickr med inställningar och lägga till en custom  "Välj tid"-knapp
     wp_add_inline_script( 'flatpickr-sv', "
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.tontid-flatpickr-time').forEach(function(elem) {
-                const picker = flatpickr(elem, {
-                    enableTime: true,
-                    dateFormat: 'Y-m-d H:i',
-                    time_24hr: true,
-                    minTime: '08:30',
-                    maxTime: '20:00',
-                    locale: 'sv',
-                    appendTo: document.body,
-                    onOpen: function(selectedDates, dateStr, instance) {
-                        if (!instance.calendarContainer.querySelector('.flatpickr-select-btn')) {
-                            const selectButton = document.createElement('button');
-                            selectButton.textContent = 'Välj tid';
-                            selectButton.classList.add('flatpickr-select-btn');
-                            instance.calendarContainer.appendChild(selectButton);
+    document.addEventListener('DOMContentLoaded', function() {
+        const pickers = [];
+        let startInput = null;
+        let endInput = null;
+        let endPicker = null;
 
-                            selectButton.addEventListener('click', function() {
-                                instance.close();
-                            });
-                        }
+        document.querySelectorAll('.tontid-flatpickr-time').forEach(function(elem, index) {
+            const picker = flatpickr(elem, {
+                enableTime: true,
+                dateFormat: 'Y-m-d H:i',
+                time_24hr: true,
+                minTime: '08:00',
+                maxTime: '20:00',
+                locale: 'sv',
+                appendTo: document.body,
+                onOpen: function(selectedDates, dateStr, instance) {
+                    // Lägg inte till knappen flera gånger
+                    if (!instance.calendarContainer.querySelector('.flatpickr-select-btn')) {
+                        const selectButton = document.createElement('button');
+                        selectButton.textContent = 'Välj tid';
+                        selectButton.classList.add('flatpickr-select-btn');
+                        instance.calendarContainer.appendChild(selectButton);
+
+                        selectButton.addEventListener('click', function() {
+                            instance.close();
+                        });
                     }
-                });
+                }
             });
+
+            pickers.push(picker);
+
+            if (index === 0) startInput = elem;
+            if (index === 1) endInput = elem;
         });
-    ", true );
+
+        if (startInput && endInput) {
+            const startPicker = pickers[0];
+            endPicker = pickers[1];
+
+            startPicker.set('onChange', function(selectedDates, dateStr, instance) {
+                if (selectedDates.length > 0) {
+                    const startDate = selectedDates[0];
+                    const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // +60 minuter
+                    endPicker.setDate(endDate, true);
+                }
+            });
+        }
+    });
+", true );
+
+
 
 
     // Lägg till CSS för knappen och input-fältet etc

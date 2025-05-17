@@ -1,19 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
 :root {
     --webbRed: hsl(353.93deg 91.75% 61.96%);
+    --creamyWhite: hsl(48.33deg 100% 92.94%);
+    --cieloCajamarquino: hsl(183.16deg 98.7% 69.8%);
+    --pistageGlass: hsl(102, 100%, 85%);
+    --strawberryDream: hsl(289.09deg 95.65% 90.98%);
+    --tummenRosa: hsl(324.44deg 100% 89.41%);
 }
 
+#wpbody-content{
+    width: auto;
+}
+
+
 .schedule{
+    font-family: "Quicksand", sans-serif;
     display: grid;
-    grid-template-columns: 50px repeat(5, 200px);
-    border: 1px solid red;
+    grid-template-columns: 80px repeat(5, 200px);
+    gap: 10px;
+    background-color: hsl(100deg, 0%, 10%);
+    padding: 10px;
+    border-radius: 5px;
+    color: black;
 }
 
 .schedule__header {
     grid-row: 1;
     font-weight: bold;
     text-align: center;
-    padding: 8px;
+    padding: 15px;
+    font-size: 24px;
+    border-radius: 5px;
 }
+
+.schedule__header:first-child{
+    background-color: var(--pistageGlass);
+}
+.schedule__header:nth-child(2){
+    background-color: var(--creamyWhite);
+}
+.schedule__header:nth-child(3){
+    background-color: var(--cieloCajamarquino);
+}
+.schedule__header:nth-child(4){
+    background-color: var(--pistageGlass);
+}
+.schedule__header:nth-child(5){
+    background-color: var(--strawberryDream);
+}
+.schedule__header:nth-child(6){
+    background-color: var(--tummenRosa);
+}
+
+
 
 .schedule__time-slots{
   display: grid;
@@ -21,18 +61,81 @@
 }
 
 .schedule-timeslot{
+    font-weight: bold;
     box-sizing: border-box;
-    border-top: 1px solid rgb(11, 160, 140);
+    border-top: 2px solid var(--cieloCajamarquino);
+    /* border-top: 2px solid var(--webbRed); */
+    /* border-top: 2px solid hsl(206.85deg 67.77% 41.37%); */
     height: 30px;
+    text-align:center;
+    color: var(--creamyWhite);
 }
+
+
 
 .schedule__weekday {
     display: grid;
     grid-template-rows: repeat(720, 1px);
-    background-color: aliceblue;
+    /* background-color: aliceblue; */
 }
 
 .booking {
-    background-color: var(--webbRed);
+    position: relative;
     border-radius: 5px;
+    padding-left: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    transition: background-color ease-in-out 0.2s;
+    overflow: hidden;
+}
+
+.booking::after {
+    content: "TA BORT";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: red;
+    color: white;
+    border: 1px solid red;
+    padding: 4px 10px;
+    border-radius: 4px;
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 10;
+    visibility: hidden;
+}
+
+.booking:hover {
+    cursor: pointer;
+    background-color: hsl(100deg, 0%, 40%)!important;
+}
+
+.booking:hover::after {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+    visibility: visible; /* 👈 gör den synlig utan layout jump */
+}
+
+
+.monday .booking{
+    background-color: var(--creamyWhite);
+}
+
+.tuesday .booking{
+    background-color: var(--cieloCajamarquino);
+}
+
+.wednesday .booking{
+    background-color: var(--pistageGlass);
+}
+
+.thursday .booking{
+    background-color: var(--strawberryDream);
+}
+
+.friday .booking{
+    background-color: var(--tummenRosa);
 }

@@ -1,6 +1,8 @@
 <?php 
 
 class TonTidAdminFunctions{
+    
+
     static function calculateBookingGridPositionAndDuration($booking){
         $booking_start_datetime = new DateTime($booking->booking_start);
         $booking_start_unix_timestamp = $booking_start_datetime->getTimestamp();
@@ -28,19 +30,16 @@ class TonTidAdminFunctions{
         $html = "<div 
                     class='booking'
                     style='grid-row:{$booking_start_row}/span {$booking_duration}'>
-                    Sal: {$booking->room_id} <br>
                     {$booking->lesson} <br>
                     {$booking_start_time}-{$booking_end_time} <br>
                     {$booking_start_date} <br>
-                    
-                    
                 </div>";
-        
+
         return $html;
     }
 
     static function test(){
-        echo "<h1>Hej baberiba!</h1>";
+        echo "<h1>Hej baberiba! Admin function test TJoho!</h1>";
     }
     
 }
