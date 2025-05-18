@@ -84,8 +84,7 @@ class AdminShowShedule{
                             <option value="">Välj vecka</option>
                             <?php 
                             for ($i = $current_week; $i <= $last_week_of_current_year; $i++) {
-                                echo '<option value="' . esc_attr($i) . '" ' . selected($selected_week, $i, false) . '>' . esc_html($i) . '</option>
-';         
+                                echo '<option value="' . esc_attr($i) . '" ' . ((isset($_GET['selected_week']) && $_GET['selected_week']== $i) ? 'selected' : "") . '>' . esc_html($i) . '</option>';         
                             }
                             ?>
                         </select>
@@ -97,7 +96,7 @@ class AdminShowShedule{
                             <option value="">Välj rum</option>
                             <?php 
                             foreach ($rooms as $room) {
-                                echo '<option value="' . esc_attr($room->room_id) . '">' . esc_html($room->room_id) . '</option>';         
+                                echo '<option value="' . esc_attr($room->room_id) . '" ' . ((isset($_GET['selected_room']) && $_GET['selected_room']==$room->room_id) ? "selected" : "") . '>' . $room->room_id . '</option>';      
                             }
                             ?>
                         </select>
