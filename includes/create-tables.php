@@ -83,130 +83,142 @@ function tontid_create_mock_bookings() {
     $table_name = $wpdb->prefix . 'tontid_bookings';
     $user_id = get_current_user_id() ?: 1;
 
-    // Definiera de veckor du vill skapa bokningar för
-    $weeks = [20, 21, 22];
+    // Definiera de veckor du vill skapa bokningar för (vecka 21 och 22)
+    $start_week = intval(date('W', strtotime('+1 week')));
+    $weeks = [$start_week, $start_week + 1];
 
-    // Definiera bokningar per rum och vecka
+    // Definiera hårdkodade bokningar per rum och vecka (utökad för fler bokningar och 1-2 timmars längd)
     $hardcoded_bookings = [
         '15' => [ // Rums-ID 15
-            20 => [ // Vecka 20
-                ['start' => '08:00', 'end' => '10:00', 'day' => 1, 'lesson' => 'Rockensembel'], // Måndag
-                ['start' => '13:00', 'end' => '14:30', 'day' => 3, 'lesson' => 'Bandrep'],   // Onsdag
-                ['start' => '15:00', 'end' => '17:00', 'day' => 5, 'lesson' => 'Gitarrlektion'], // Fredag
-                ['start' => '09:30', 'end' => '11:00', 'day' => 2, 'lesson' => 'Samspel'],    // Tisdag
-                ['start' => '11:30', 'end' => '13:30', 'day' => 4, 'lesson' => 'Trumlektion'],  // Torsdag
-            ],
             21 => [ // Vecka 21
-                ['start' => '08:30', 'end' => '10:30', 'day' => 1, 'lesson' => 'Latinensembel'],
-                ['start' => '12:30', 'end' => '14:00', 'day' => 3, 'lesson' => 'Percussion'],
-                ['start' => '14:30', 'end' => '16:30', 'day' => 5, 'lesson' => 'Baslektion'],
-                ['start' => '10:00', 'end' => '11:30', 'day' => 2, 'lesson' => 'Ensemble'],
-                ['start' => '13:00', 'end' => '15:00', 'day' => 4, 'lesson' => 'Keyboard'],
+                ['start' => '08:00', 'end' => '09:30', 'day' => 1, 'lesson' => 'Rockensembel'],
+                ['start' => '10:00', 'end' => '11:30', 'day' => 1, 'lesson' => 'Bandcoachning'],
+                ['start' => '13:00', 'end' => '14:00', 'day' => 3, 'lesson' => 'Bandrep'],
+                ['start' => '14:30', 'end' => '16:00', 'day' => 3, 'lesson' => 'Låtskriveri'],
+                ['start' => '15:00', 'end' => '17:00', 'day' => 5, 'lesson' => 'Gitarrlektion'],
+                ['start' => '09:30', 'end' => '10:30', 'day' => 2, 'lesson' => 'Samspel'],
+                ['start' => '11:00', 'end' => '12:30', 'day' => 2, 'lesson' => 'Improvisation'],
+                ['start' => '11:30', 'end' => '13:00', 'day' => 4, 'lesson' => 'Trumlektion'],
+                ['start' => '13:30', 'end' => '15:30', 'day' => 4, 'lesson' => 'Rytmik'],
             ],
             22 => [ // Vecka 22
-                ['start' => '09:00', 'end' => '11:00', 'day' => 1, 'lesson' => 'Klassisk ensembel'],
-                ['start' => '13:30', 'end' => '15:00', 'day' => 3, 'lesson' => 'Teori'],
-                ['start' => '15:30', 'end' => '17:00', 'day' => 5, 'lesson' => 'Blås'],
-                ['start' => '10:30', 'end' => '12:00', 'day' => 2, 'lesson' => 'Musikhistoria'],
-                ['start' => '14:00', 'end' => '16:00', 'day' => 4, 'lesson' => 'Komposition'],
+                ['start' => '08:30', 'end' => '10:00', 'day' => 1, 'lesson' => 'Latinensembel'],
+                ['start' => '10:30', 'end' => '12:00', 'day' => 1, 'lesson' => 'Musikhistoria'],
+                ['start' => '12:30', 'end' => '13:30', 'day' => 3, 'lesson' => 'Percussion'],
+                ['start' => '14:00', 'end' => '15:30', 'day' => 3, 'lesson' => 'Arrangering'],
+                ['start' => '14:30', 'end' => '16:30', 'day' => 5, 'lesson' => 'Baslektion'],
+                ['start' => '10:00', 'end' => '11:00', 'day' => 2, 'lesson' => 'Ensemble'],
+                ['start' => '11:30', 'end' => '13:00', 'day' => 2, 'lesson' => 'Gehörsträning'],
+                ['start' => '13:00', 'end' => '14:30', 'day' => 4, 'lesson' => 'Keyboard'],
+                ['start' => '15:00', 'end' => '16:30', 'day' => 4, 'lesson' => 'Syntintroduktion'],
             ],
         ],
         '108' => [ // Rums-ID 108
-            20 => [
-                ['start' => '09:00', 'end' => '11:00', 'day' => 2, 'lesson' => 'Elektronisk musik'],
-                ['start' => '14:00', 'end' => '15:30', 'day' => 4, 'lesson' => 'Synt-labb'],
-                ['start' => '08:00', 'end' => '09:30', 'day' => 1, 'lesson' => 'Ljuddesign'],
-                ['start' => '11:30', 'end' => '13:00', 'day' => 3, 'lesson' => 'Sampling'],
-                ['start' => '15:30', 'end' => '17:00', 'day' => 5, 'lesson' => 'Mixning'],
-            ],
             21 => [
-                ['start' => '10:00', 'end' => '12:00', 'day' => 2, 'lesson' => 'Synth-lab'],
-                ['start' => '15:00', 'end' => '16:30', 'day' => 4, 'lesson' => 'Sequencing'],
-                ['start' => '09:00', 'end' => '10:30', 'day' => 1, 'lesson' => 'Effektprocessorer'],
-                ['start' => '12:30', 'end' => '14:00', 'day' => 3, 'lesson' => 'Modularsynt'],
-                ['start' => '16:30', 'end' => '17:00', 'day' => 5, 'lesson' => 'Mastering'],
+                ['start' => '09:00', 'end' => '11:00', 'day' => 2, 'lesson' => 'Elektronisk musik'],
+                ['start' => '11:30', 'end' => '13:00', 'day' => 2, 'lesson' => 'Syntdesign'],
+                ['start' => '14:00', 'end' => '15:30', 'day' => 4, 'lesson' => 'Synt-labb'],
+                ['start' => '16:00', 'end' => '17:00', 'day' => 4, 'lesson' => 'Modulärsynt'],
+                ['start' => '08:00', 'end' => '09:00', 'day' => 1, 'lesson' => 'Ljuddesign'],
+                ['start' => '09:30', 'end' => '11:30', 'day' => 1, 'lesson' => 'Akustik'],
+                ['start' => '11:30', 'end' => '13:00', 'day' => 3, 'lesson' => 'Sampling'],
+                ['start' => '13:30', 'end' => '15:00', 'day' => 3, 'lesson' => 'Sequencing'],
+                ['start' => '15:30', 'end' => '17:00', 'day' => 5, 'lesson' => 'Mixning'],
+                ['start' => '17:30', 'end' => '18:30', 'day' => 5, 'lesson' => 'Mastering'],
             ],
             22 => [
-                ['start' => '11:00', 'end' => '13:00', 'day' => 2, 'lesson' => 'Midi-programmering'],
-                ['start' => '16:00', 'end' => '17:00', 'day' => 4, 'lesson' => 'Live-elektronik'],
-                ['start' => '10:00', 'end' => '11:30', 'day' => 1, 'lesson' => 'Digitala ljudverktyg'],
-                ['start' => '13:30', 'end' => '15:00', 'day' => 3, 'lesson' => 'Ljudsyntes'],
-                ['start' => '08:00', 'end' => '09:30', 'day' => 5, 'lesson' => 'Studioinspelning'],
+                ['start' => '10:00', 'end' => '11:30', 'day' => 2, 'lesson' => 'Synth-lab'],
+                ['start' => '12:00', 'end' => '14:00', 'day' => 2, 'lesson' => 'Ljudsyntes'],
+                ['start' => '15:00', 'end' => '16:00', 'day' => 4, 'lesson' => 'Sequencing'],
+                ['start' => '16:30', 'end' => '18:00', 'day' => 4, 'lesson' => 'Live-elektronik'],
+                ['start' => '09:00', 'end' => '10:00', 'day' => 1, 'lesson' => 'Effektprocessorer'],
+                ['start' => '10:30', 'end' => '12:30', 'day' => 1, 'lesson' => 'Digitala ljudverktyg'],
+                ['start' => '12:30', 'end' => '14:00', 'day' => 3, 'lesson' => 'Modularsynt'],
+                ['start' => '14:30', 'end' => '16:00', 'day' => 3, 'lesson' => 'Midi-programmering'],
+                ['start' => '16:30', 'end' => '17:30', 'day' => 5, 'lesson' => 'Mastering'],
+                ['start' => '18:00', 'end' => '19:00', 'day' => 5, 'lesson' => 'Ljudinstallationer'],
             ],
         ],
         '113' => [ // Rums-ID 113
-            // Lägg till bokningar för vecka 20, 21, 22 här (minst 5 per vecka)
-            20 => [
-                ['start' => '14:00', 'end' => '16:00', 'day' => 1, 'lesson' => 'Sånglektion'],
-                ['start' => '09:00', 'end' => '10:30', 'day' => 3, 'lesson' => 'Vocal coaching'],
-                ['start' => '11:00', 'end' => '12:30', 'day' => 5, 'lesson' => 'Sångensemble'],
-                ['start' => '15:00', 'end' => '16:30', 'day' => 2, 'lesson' => 'Röstteknik'],
-                ['start' => '08:30', 'end' => '10:00', 'day' => 4, 'lesson' => 'Interpretation'],
-            ],
             21 => [
-                ['start' => '14:30', 'end' => '16:30', 'day' => 1, 'lesson' => 'Sånglektion'],
-                ['start' => '09:30', 'end' => '11:00', 'day' => 3, 'lesson' => 'Vocal coaching'],
-                ['start' => '11:30', 'end' => '13:00', 'day' => 5, 'lesson' => 'Kör'],
-                ['start' => '15:30', 'end' => '17:00', 'day' => 2, 'lesson' => 'Scennärvaro'],
-                ['start' => '09:00', 'end' => '10:30', 'day' => 4, 'lesson' => 'Repertoar'],
+                ['start' => '14:00', 'end' => '15:30', 'day' => 1, 'lesson' => 'Sånglektion'],
+                ['start' => '16:00', 'end' => '17:00', 'day' => 1, 'lesson' => 'Röstvård'],
+                ['start' => '09:00', 'end' => '10:30', 'day' => 3, 'lesson' => 'Vocal coaching'],
+                ['start' => '11:00', 'end' => '12:00', 'day' => 3, 'lesson' => 'Interpretation'],
+                ['start' => '11:00', 'end' => '12:30', 'day' => 5, 'lesson' => 'Sångensemble'],
+                ['start' => '13:00', 'end' => '14:00', 'day' => 5, 'lesson' => 'Scennärvaro'],
+                ['start' => '15:00', 'end' => '16:30', 'day' => 2, 'lesson' => 'Röstteknik'],
+                ['start' => '17:00', 'end' => '18:00', 'day' => 2, 'lesson' => 'Mikrofonteknik'],
+                ['start' => '08:30', 'end' => '10:00', 'day' => 4, 'lesson' => 'Repertoarstudier'],
+                ['start' => '10:30', 'end' => '11:30', 'day' => 4, 'lesson' => 'Musikalisk gestaltning'],
+                ['start' => '12:00', 'end' => '13:00', 'day' => 4, 'lesson' => 'Improvisation'],
             ],
             22 => [
-                ['start' => '15:00', 'end' => '17:00', 'day' => 1, 'lesson' => 'Vocal coaching'],
-                ['start' => '10:00', 'end' => '11:30', 'day' => 3, 'lesson' => 'Sånginterpretation'],
-                ['start' => '12:00', 'end' => '13:30', 'day' => '5', 'lesson' => 'Stämmor'],
-                ['start' => '16:00', 'end' => '17:00', 'day' => 2, 'lesson' => 'Mikrofonteknik'],
-                ['start' => '09:30', 'end' => '11:00', 'day' => 4, 'lesson' => 'Musikalisk gestaltning'],
+                ['start' => '14:30', 'end' => '16:30', 'day' => 1, 'lesson' => 'Sånglektion'],
+                ['start' => '17:00', 'end' => '18:00', 'day' => 1, 'lesson' => 'Textinterpretation'],
+                ['start' => '09:30', 'end' => '11:00', 'day' => 3, 'lesson' => 'Vocal coaching'],
+                ['start' => '11:30', 'end' => '12:30', 'day' => 3, 'lesson' => 'Gehör och rytmik'],
+                ['start' => '11:30', 'end' => '13:00', 'day' => 5, 'lesson' => 'Kör'],
+                ['start' => '13:30', 'end' => '14:30', 'day' => 5, 'lesson' => 'Stämmor'],
+                ['start' => '15:30', 'end' => '17:00', 'day' => 2, 'lesson' => 'Scennärvaro'],
+                ['start' => '17:30', 'end' => '18:30', 'day' => 2, 'lesson' => 'Rörelse och uttryck'],
+                ['start' => '09:00', 'end' => '10:30', 'day' => 4, 'lesson' => 'Repertoar'],
+                ['start' => '11:00', 'end' => '12:00', 'day' => 4, 'lesson' => 'Konsertförberedelse'],
             ],
         ],
         '114' => [ // Rums-ID 114
-            // Lägg till bokningar för vecka 20, 21, 22 här (minst 5 per vecka)
-            20 => [
-                ['start' => '08:00', 'end' => '10:00', 'day' => 2, 'lesson' => 'Pianoteknik'],
-                ['start' => '10:30', 'end' => '12:00', 'day' => 4, 'lesson' => 'Ackordspel'],
-                ['start' => '13:00', 'end' => '14:30', 'day' => 1, 'lesson' => 'Notläsning'],
-                ['start' => '15:00', 'end' => '16:30', 'day' => 3, 'lesson' => 'Improvisation'],
-                ['start' => '09:30', 'end' => '11:00', 'day' => 5, 'lesson' => 'Repertoarstudier'],
-            ],
             21 => [
-                ['start' => '08:30', 'end' => '10:30', 'day' => 2, 'lesson' => 'Improvisation'],
-                ['start' => '11:00', 'end' => '12:30', 'day' => 4, 'lesson' => 'Harmonilära'],
-                ['start' => '13:30', 'end' => '15:00', 'day' => 1, 'lesson' => 'Interpretation'],
-                ['start' => '15:30', 'end' => '17:00', 'day' => 3, 'lesson' => 'Komp'],
-                ['start' => '10:00', 'end' => '11:30', 'day' => 5, 'lesson' => 'Pianolektion'],
+                ['start' => '08:00', 'end' => '09:30', 'day' => 2, 'lesson' => 'Pianoteknik'],
+                ['start' => '10:00', 'end' => '11:00', 'day' => 2, 'lesson' => 'Skalor och arpeggion'],
+                ['start' => '10:30', 'end' => '12:00', 'day' => 4, 'lesson' => 'Ackordspel'],
+                ['start' => '12:30', 'end' => '13:30', 'day' => 4, 'lesson' => 'Ackordföljder'],
+                ['start' => '13:00', 'end' => '14:30', 'day' => 1, 'lesson' => 'Notläsning'],
+                ['start' => '15:00', 'end' => '16:00', 'day' => 1, 'lesson' => 'Rytm och timing'],
+                ['start' => '15:00', 'end' => '16:30', 'day' => 3, 'lesson' => 'Improvisation'],
+                ['start' => '17:00', 'end' => '18:00', 'day' => 3, 'lesson' => 'Bluespiano'],
+                ['start' => '09:30', 'end' => '11:00', 'day' => 5, 'lesson' => 'Repertoarstudier'],
+                ['start' => '11:30', 'end' => '12:30', 'day' => 5, 'lesson' => 'Interpretation'],
             ],
             22 => [
-                ['start' => '09:00', 'end' => '11:00', 'day' => 2, 'lesson' => 'Ackompanjemang'],
-                ['start' => '11:30', 'end' => '13:00', 'day' => 4, 'lesson' => 'Kontrapunkt'],
-                ['start' => '14:00', 'end' => '15:30', 'day' => 1, 'lesson' => 'Stilar och genrer'],
-                ['start' => '16:00', 'end' => '17:00', 'day' => 3, 'lesson' => 'Pedagogik'],
-                ['start' => '10:30', 'end' => '12:00', 'day' => 5, 'lesson' => 'Kammarmusik'],
+                ['start' => '08:30', 'end' => '10:00', 'day' => 2, 'lesson' => 'Improvisation'],
+                ['start' => '10:30', 'end' => '11:30', 'day' => 2, 'lesson' => 'Jazzpiano'],
+                ['start' => '11:00', 'end' => '12:30', 'day' => 4, 'lesson' => 'Harmonilära'],
+                ['start' => '13:00', 'end' => '14:00', 'day' => 4, 'lesson' => 'Funktionsanalys'],
+                ['start' => '13:30', 'end' => '15:00', 'day' => 1, 'lesson' => 'Interpretation'],
+                ['start' => '15:30', 'end' => '16:30', 'day' => 1, 'lesson' => 'Stilar och genrer'],
+                ['start' => '15:30', 'end' => '17:00', 'day' => 3, 'lesson' => 'Komp'],
+                ['start' => '17:30', 'end' => '18:30', 'day' => 3, 'lesson' => 'Ackompanjemang'],
+                ['start' => '10:00', 'end' => '11:30', 'day' => 5, 'lesson' => 'Pianolektion'],
+                ['start' => '12:00', 'end' => '13:00', 'day' => 5, 'lesson' => 'Pedagogik'],
             ],
         ],
         '115' => [ // Rums-ID 115
-            // Lägg till bokningar för vecka 20, 21, 22 här (minst 5 per vecka)
-            20 => [
-                ['start' => '10:00', 'end' => '12:00', 'day' => 2, 'lesson' => 'Interpretation'],
-                ['start' => '13:00', 'end' => '14:30', 'day' => 4, 'lesson' => 'Ensembleträning'],
-                ['start' => '08:30', 'end' => '10:00', 'day' => 1, 'lesson' => 'Kammarmusik'],
-                ['start' => '15:00', 'end' => '16:30', 'day' => 3, 'lesson' => 'Repertoar'],
-                ['start' => '11:30', 'end' => '13:00', 'day' => 5, 'lesson' => 'Instudering'],
-            ],
             21 => [
-                ['start' => '10:30', 'end' => '12:30', 'day' => 2, 'lesson' => 'Kammarmusik'],
-                ['start' => '13:30', 'end' => '15:00', 'day' => 4, 'lesson' => 'Gruppspel'],
-                ['start' => '09:00', 'end' => '10:30', 'day' => 1, 'lesson' => 'Interpretation'],
-                ['start' => '15:30', 'end' => '17:00', 'day' => 3, 'lesson' => 'Konsertförberedelse'],
-                ['start' => '12:00', 'end' => '13:30', 'day' => 5, 'lesson' => 'Notanalys'],
+                ['start' => '10:00', 'end' => '11:30', 'day' => 2, 'lesson' => 'Interpretation'],
+                ['start' => '12:00', 'end' => '13:00', 'day' => 2, 'lesson' => 'Notläsning och analys'],
+                ['start' => '13:00', 'end' => '14:30', 'day' => 4, 'lesson' => 'Ensembleträning'],
+                ['start' => '15:00', 'end' => '16:00', 'day' => 4, 'lesson' => 'Stämspel'],
+                ['start' => '08:30', 'end' => '10:00', 'day' => 1, 'lesson' => 'Kammarmusik'],
+                ['start' => '10:30', 'end' => '11:30', 'day' => 1, 'lesson' => 'Stilkunskap'],
+                ['start' => '15:00', 'end' => '16:30', 'day' => 3, 'lesson' => 'Repertoar'],
+                ['start' => '17:00', 'end' => '18:00', 'day' => 3, 'lesson' => 'Instuderingsteknik'],
+                ['start' => '11:30', 'end' => '13:00', 'day' => 5, 'lesson' => 'Instudering'],
+                ['start' => '13:30', 'end' => '14:30', 'day' => 5, 'lesson' => 'Framförandepraxis'],
             ],
             22 => [
-                ['start' => '11:00', 'end' => '13:00', 'day' => 2, 'lesson' => 'Ensemble'],
-                ['start' => '14:00', 'end' => '15:30', 'day' => 4, 'lesson' => 'Framförande'],
-                ['start' => '09:30', 'end' => '11:00', 'day' => 1, 'lesson' => 'Kammarmusik'],
-                ['start' => '16:00', 'end' => '17:00', 'day' => 3, 'lesson' => 'Teknikövningar'],
-                ['start' => '12:30', 'end' => '14:00', 'day' => 5, 'lesson' => 'Musikteori i praktik'],
+                ['start' => '10:30', 'end' => '12:00', 'day' => 2, 'lesson' => 'Kammarmusik'],
+                ['start' => '12:30', 'end' => '13:30', 'day' => 2, 'lesson' => 'Gehörsspel'],
+                ['start' => '13:30', 'end' => '15:00', 'day' => 4, 'lesson' => 'Gruppspel'],
+                ['start' => '15:30', 'end' => '16:30', 'day' => 4, 'lesson' => 'Improvisation i ensemble'],
+                ['start' => '09:00', 'end' => '10:30', 'day' => 1, 'lesson' => 'Interpretation'],
+                ['start' => '11:00', 'end' => '12:00', 'day' => 1, 'lesson' => 'Musikteori i ensemble'],
+                ['start' => '15:30', 'end' => '17:00', 'day' => 3, 'lesson' => 'Konsertförberedelse'],
+                ['start' => '17:30', 'end' => '18:30', 'day' => 3, 'lesson' => 'Scennärvaro i ensemble'],
+                ['start' => '12:00', 'end' => '13:30', 'day' => 5, 'lesson' => 'Notanalys'],
+                ['start' => '14:00', 'end' => '15:00', 'day' => 5, 'lesson' => 'Repertoarval'],
             ],
         ],
-        // Lägg till bokningar för fler rum här om du har dem
+        // Lägg till bokningar för fler rum här om du har dem för vecka 21 och 22
     ];
 
     foreach ($weeks as $week) {
@@ -234,7 +246,7 @@ function tontid_create_mock_bookings() {
                             'booking_end' => $end_datetime_str,
                             'booking_status' => 'Pending',
                         ],
-                        ['%s', '%s', '%d', '%s', '%s', '%s']
+                        ['%d', '%s', '%d', '%s', '%s', '%s']
                     );
                 }
             }

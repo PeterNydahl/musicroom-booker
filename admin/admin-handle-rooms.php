@@ -196,17 +196,13 @@ class AdminHandleRooms {
                     : TonTidUtils::show_notice_error();
                 endif; ?>
 
-            <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+            <form class="form-table table-delete-room" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
                 <input type="hidden" name="action" value="tontid_delete_room">
                 <?php wp_nonce_field( 'tontid_delete_room_nonce', 'tontid_delete_room_nonce' ); ?>
 
                 <table class="form-table">
                     <tr>
-                        <th scope="row">
-                            <label for="room_id_to_delete">Välj rum att ta bort</label>
-                        </th>
-                        <td>
-                            <select name="room_id_to_delete" id="room_id_to_delete" required>
+     <select name="room_id_to_delete" id="room_id_to_delete" required>
                                 <option value="">Välj ett rum</option>
                                 <?php if ( ! empty( $rooms ) ) : ?>
                                     <?php foreach ( $rooms as $room ) : ?>
@@ -218,14 +214,17 @@ class AdminHandleRooms {
                                     <option value="" disabled>Inga rum har lagts till ännu</option>
                                 <?php endif; ?>
                             </select>
-                            <p class="description">Välj det rum du vill ta bort.</p>
-                        </td>
+                            
+                            <input type="submit" class="delete-room-button"value="Ta bort rum">
+
+                            
+                      
+                    </tr>
+               
+                    <tr>
+
                     </tr>
                 </table>
-
-                <?php if ( ! empty( $rooms ) ) : ?>
-                    <?php submit_button( 'Ta bort valt rum', 'delete', 'submit', false ); ?>
-                <?php endif; ?>
             </form>
         </div>
         <?php

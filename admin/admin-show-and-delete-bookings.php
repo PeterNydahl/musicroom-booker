@@ -55,10 +55,10 @@ class AdminShowAndDeleteBookings {
             $this->message_displayer();
             ?>
             <input type="hidden" name="action" value="tontid_show_bookings">
-            <table class="form-table" style="width:auto">
+            <table class="form-table select-room-for-booking-filtering" style="width:auto">
                 <tr>
                     <td>
-                        <label for="filter_by_room"><strong>Välj rum</strong></label>        
+                        <!-- <label for="filter_by_room"><strong>Välj rum</strong></label>         -->
                         <select name="selected_room" id="filter_by_room">
                             <option value="">Välj rum</option>
                             <option value="alla_rum">- alla rum -</option>
@@ -122,7 +122,7 @@ public function handle_room_filter_submit() {
 
         if($bookings){
             echo "<h2>Visar bokningar för rum: $selected_room</h2>";
-            echo "<table class='form-table'>";
+            echo "<table class='form-table delete-bookings-table'>";
             echo "<tr>
                     <th>Rum</th>
                     <th>Lektion</th>
@@ -140,15 +140,13 @@ public function handle_room_filter_submit() {
                         <form action='" . esc_url(admin_url('admin-post.php')) . "' method='post'>
                             <input type='hidden' name='action' value='tontid_delete_booking'>
                             <input type='hidden' name='booking_to_delete_id' value='{$booking->booking_id}' />
-                            <input type='submit' value='Ta bort bokning' />
+                            <input type='submit' value='Ta bort' class='delete-button'/>
                         </form>
                     </td>
                 </tr>";
             }
             echo "</table>";
-        } else {
-            echo "<p>Musik ska byggas utav ångest.</p>";
-        } 
+        }
     }
 
     public function handle_delete_booking(){

@@ -37,10 +37,6 @@ class TonTidAdminFunctions{
 
         return $html;
     }
-
-    static function test(){
-        echo "<h1>Hej baberiba! Admin function test TJoho!</h1>";
-    }
     
 }
 
