@@ -6,6 +6,13 @@
  * Author: Peter Nydahl
  */
 
+// INKLUDERAR API ENDPOINTS     
+add_action('plugins_loaded', function () {
+    require_once plugin_dir_path(__FILE__) . 'api/get-bookings.php';
+    require_once plugin_dir_path(__FILE__) . 'api/get-rooms.php';
+});
+
+
 /* LADDA IN MEDDELANDEN & KONTROLLFUNKTIONER
 -----------------------------------------------------*/
 require_once plugin_dir_path(__FILE__) . 'includes/messages-and-checks.php';

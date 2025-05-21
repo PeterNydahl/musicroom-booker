@@ -1,8 +1,6 @@
 <?php 
 
 class TonTidAdminFunctions{
-    
-
     static function calculateBookingGridPositionAndDuration($booking){
         $booking_start_datetime = new DateTime($booking->booking_start);
         $booking_start_unix_timestamp = $booking_start_datetime->getTimestamp();
